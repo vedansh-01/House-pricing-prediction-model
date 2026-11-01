@@ -13,9 +13,30 @@ A production-style ML system that predicts house sale prices from property featu
 - ✅ Hyperparameter tuning via Optuna (Bayesian search)
 - ✅ SHAP explainability (global + per-prediction)
 - ✅ FastAPI deployment with Docker
+- ✅ Interactive Streamlit web application (`app.py`)
 - ✅ Evidently AI data drift monitoring
 
 **Target performance**: CV RMSE ~0.11–0.13 (log scale), competitive with Kaggle public leaderboard.
+
+---
+
+## 📸 Application Interface & Visualizations
+
+### 1. Interactive Property Valuation UI
+Adjust property features (living area, overall quality, year built, garage capacity, neighborhood) with live valuation feedback.
+![Interactive Property Valuation UI](docs/screenshots/ui_interactive_inputs.png)
+
+### 2. Live Prediction & SHAP Feature Explanations
+Real-time house price estimation alongside global SHAP impact explaining which features drove the valuation.
+![Live Prediction & SHAP Explainability](docs/screenshots/ui_prediction_shap.png)
+
+### 3. Exploratory Data Distributions & Correlation Analysis
+Inspect the raw vs. log-transformed target price distributions and top correlated feature pairs.
+![EDA Distributions and Correlation Heatmap](docs/screenshots/ui_eda_distributions.png)
+
+### 4. Evidently AI Data Drift Monitoring
+Continuous production data monitoring tracking distribution shifts and automatic retrain triggers.
+![Evidently AI Data Drift Monitoring](docs/screenshots/ui_monitoring_drift.png)
 
 ---
 
@@ -23,9 +44,12 @@ A production-style ML system that predicts house sale prices from property featu
 
 ```
 house-price-ml/
+├── app.py                  # Interactive Streamlit Web Application
 ├── data/
-│   ├── raw/                # train.csv, test.csv (download from Kaggle)
+│   ├── raw/                # train.csv, test.csv
 │   └── processed/          # feature_pipeline.pkl, shap_summary.png, eda/
+├── docs/
+│   └── screenshots/        # UI and analysis screenshots
 ├── src/
 │   ├── config.py           # All paths + feature lists (single source of truth)
 │   ├── data_prep.py        # load_data(), remove_outliers(), get_cv_folds()
@@ -108,10 +132,15 @@ python -m src.explain
 # Saves data/processed/shap_summary.png, logs to MLflow
 ```
 
-### Phase 6 — API (local)
+### Phase 6 — API & Interactive Web UI
 ```bash
+# FastAPI Backend
 uvicorn api.main:app --reload --port 8000
-# Docs: http://localhost:8000/docs
+# Swagger Docs: http://localhost:8000/docs
+
+# Interactive Streamlit UI
+streamlit run app.py
+# Web UI: http://localhost:8501
 ```
 
 ### Phase 7 — Drift Monitoring
